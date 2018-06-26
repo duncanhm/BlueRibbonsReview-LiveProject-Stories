@@ -1,0 +1,141 @@
+﻿@model IEnumerable<BlueRibbonsReview.ViewModels.AdminViewModel>
+
+@{
+    ViewBag.Title = "Users";
+    ViewBag.Tagline = "";
+}
+
+@*<h2>BlueRibbonsUsers</h2>*@
+
+<div class="form-group form-inline">
+    <div class="filterArea">
+        <div class="searchBar">
+            @using (Html.BeginForm("Index", "Admin"))
+            {
+                @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "Narrow results by name", id = "adminSearch" })
+                <button type="submit" id="searchButton"><span class="glyphicon glyphicon-search"></span></button>
+            }
+        </div>
+    </div>
+</div>
+
+<table class="table">
+
+    <tr>
+
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.LastNameSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th class="columncenter">
+            @Html.ActionLink(Html.DisplayNameFor(model => model.UserRoleName).ToString(), "Index", new { sortOrder = ViewBag.UserRoleSortParm })
+        </th>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.JoinDate).ToString(), "Index", new { sortOrder = ViewBag.JoinDateSortParm })
+        </th>
+
+        <th class="columncenter">
+            @Html.ActionLink(Html.DisplayNameFor(model => model.CampaignCount).ToString(), "Index", new { sortOrder = ViewBag.CampaignCountSortParm })
+        </th>
+        <th class="columncenter">
+            @Html.ActionLink(Html.DisplayNameFor(model => model.ReferralCount).ToString(), "Index", new { sortOrder = ViewBag.ReferralCountSortParm })
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (item.UserRoleName != "Admin")
+        {
+            <tr>
+                <td>
+                    @{
+                        string fullName = item.FirstName + " " + item.LastName;
+                        @Html.ActionLink(fullName, "Details", "Admin", new { id = item.UserID }, null)
+                    }
+                </td>
+                <td>
+                    @{
+                        @Html.DisplayFor(modelItem => item.Email)<span>&nbsp;</span><a href="mailto:@(item.Email)" class="fas fa-paper-plane"></a>
+                    }
+                </td>
+                <td class="columncenter">
+                    @Html.DisplayFor(modelItem => item.UserRoleName)
+                </td>
+                <td>
+                    @DateTime.Parse(Html.DisplayFor(Model => item.JoinDate).ToString()).ToShortDateString()
+                </td>
+
+                @* Campaign Count dropdown is only displayed when the count is greater than zero *@
+                <td class="columncenter">
+                    @{
+                        if (item.CampaignCount == 0)
+                        {
+                            @Html.DisplayFor(modelItem => item.CampaignCount)
+                        }
+                        else
+                        {
+                            <div class="btn-group">
+                                <div class="dropdown-menu text-center">
+                                <button type="button" class="btn btn-dark">@Html.DisplayFor(modelItem => item.CampaignCount)</button>
+                                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                                <ul class="dropdown-menu">
+
+                                    @*foreach user create link to all campaigns they have made in the dropdown.*@
+                                    @{
+                                        foreach (var campaign in item.Campaigns)
+                                        {
+                                            <li>@Html.DisplayFor(modelItem => campaign.Name)</li>
+                                        }
+                                    }
+
+                                </ul>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @*  Referral Count dropdown is only displayed when the count is greater than zero *@
+                <td class="columncenter">
+                    @{
+                        if (item.ReferralCount == 0)
+                        {
+                            @Html.DisplayFor(modelItem => item.ReferralCount)
+                        }
+                        else
+                        {
+                            <div class="btn-group">
+                                <div class="dropdown-menu text-center">
+                                <button type="button" class="btn btn-dark">@Html.DisplayFor(modelItem => item.ReferralCount)</button>
+                                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                                <ul class="dropdown-menu">
+
+                                    @*foreach user create link to all referrals they have made in the dropdown.*@
+                                    @{
+                                        foreach (var referral in item.Referrals)
+                                        {
+                                            <li>@Html.DisplayFor(modelItem => referral.ReferralName)</li>
+                                        }
+                                    }
+
+                                </ul>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                <td>
+                    @Html.ActionLink(" ", "Edit", new { id = item.UserID }, new { @class = "fa fa-pencil-square-o fa-lg" }) |
+                    @Html.ActionLink(" ", "Delete", new { id = item.UserID }, new { @class = "far fa-trash-alt fa-lg" })
+                </td>
+            </tr>
+        }
+
+    }
+
+</table>
+
+@Html.ActionLink("Export Emails to Csv", "ExportEmailListToCSV")

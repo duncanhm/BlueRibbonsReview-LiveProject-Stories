@@ -1,0 +1,125 @@
+﻿@model IEnumerable<BlueRibbonsReview.ViewModels.AnalyticsViewModel>
+
+@{
+    ViewBag.Tagline = "";
+}
+
+
+
+<p class="dropdown filterArea">
+    <a href="@Url.Action("Create", "Reviews")"><span class="fas fa-pencil-alt fa-lg"></span><span class="black">&nbsp;Write a Review</span></a>
+</p>
+
+<div class="dropdown filterArea">
+    <button class="btn btn-default dropdown-toggle" type="button" id="sortBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Sort By
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="sortBy">
+        <li>@Html.ActionLink("Name A-Z", "Index", new { sortOrder = ViewBag.NameSortParm })</li>
+        <li>@Html.ActionLink("Name Z-A", "Index", new { sortOrder = ViewBag.NameDescSortParm })</li>
+        <li>@Html.ActionLink("Rating - Highest First", "Index", new { sortOrder = ViewBag.RatingDescSortParm }) </li>
+        <li>@Html.ActionLink("Rating - Lowest First", "Index", new { sortOrder = ViewBag.RatingSortParm }) </li>
+    </ul>
+</div>
+
+<div id="accordion">
+    @foreach (var item in Model)
+    {
+    <div class="accordion-item">
+        <img class="imgThumb" src="@item.Campaign.ImageUrL" alt="@item.Campaign.Name" /> | @Html.DisplayFor(modelItem => item.Campaign.Name) |
+        @for (int i = 0; i < item.ReviewAverage; i++)
+        {
+            <!--Could not find the source for the stars so I could not remove the pointer effect on hover. this is due to the star-rating__ico -->
+            <div class="star-rating__wrap ">
+                <span style="cursor:default" class="star-rating__ico fa fa-star fa-lg" title="@item.ReviewAverage out of 5 stars" value: @item.ReviewAverage></span>
+            </div>
+        }
+        @{ int ReviewCount = item.Campaign.Reviews.Count(); }
+        @Html.Raw(ReviewCount)
+        @if (ReviewCount != 1)
+        {
+            @Html.Raw(" Reviews")
+        }
+        else
+        {
+            @Html.Raw(" Review")
+        }
+        <p class="review-details">See More Details<span class="chevron bottom"></span></p>
+    </div>
+        
+
+        <div>
+            <ul style="list-style-type:none">
+                @foreach (var review in item.Campaign.Reviews)
+                {
+                <li>
+                    @Html.LabelFor(p => review.ReviewDate): @Html.DisplayFor(p => review.ReviewDate) |
+                    @Html.LabelFor(p => review.ProductRating):
+                    @for (int i = 0; i < item.ReviewAverage; i++)
+                    {
+                        <!--Could not find the source for the stars so I could not remove the pointer effect on hover. this is due to the star-rating__ico -->
+                        <div class="star-rating__wrap ">
+                            <span style="cursor:default" class="star-rating__ico fa fa-star fa-lg" title="@review.ProductRating out of 5 stars" value: @review.ProductRating></span>
+                        </div>
+                    }
+                    | @Html.LabelFor(p => review.ReviewDetails):
+                    
+                    @{
+                        var message = review.ReviewDetails;
+                        var messageLength = review.ReviewDetails.Length;
+
+                        if (messageLength > 40)
+                        {
+                            message = message.Substring(0, 40);
+                            <span>@message...</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(p => review.ReviewDetails);
+                        }
+                    }
+                </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

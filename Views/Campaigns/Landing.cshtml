@@ -1,0 +1,23 @@
+﻿@model IEnumerable<BlueRibbonsReview.Models.Campaign>
+
+@{
+    ViewBag.Title = "Welcome to Blue Ribbons Review";
+}
+
+<h2>Sign up today and start browsing the site for great deals!<br/> All our products are 70% off or more!</h2>
+
+@*<div class="container campaign-index-details">
+    @{ 
+        Html.RenderAction("GetLandingPartial");
+    }
+</div>*@
+
+<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Campaigns")'">
+    See More Details
+</button>
+<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Register", "Account")'">
+    Sign Up Today
+</button>
+
+
+

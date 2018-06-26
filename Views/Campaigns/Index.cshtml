@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BlueRibbonsReview.Models.Campaign>
+
+@{
+    ViewBag.Title = "Campaigns";
+    ViewBag.Tagline = "Check out our products! All products are 70% off or more!";
+}
+<div class="text-center">
+    @*<h2>Check out our products! All products are 70% off or more!</h2>*@
+</div>
+
+<div>
+    <div class="form-group form-inline">
+        <div class="filterArea">
+            <div class="searchBar">
+                @using (Html.BeginForm())
+                 {
+                    @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "Narrow results by name", id = "campaignSearch" })
+                    <button type="submit" id="searchButton"><span class="glyphicon glyphicon-search"></span></button>
+                 }
+            </div>
+        </div>
+        <div class="dropdown filterArea">
+            <button class="btn btn-default dropdown-toggle" type="button" id="sortBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Sort By
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sortBy">
+                <li>@Html.ActionLink("Newest First", "Index", new { sortOrder = ViewBag.StartDateDescSortParm })</li>
+                <li>@Html.ActionLink("Oldest First", "Index", new { sortOrder = ViewBag.StartDateSortParm })</li>
+                <li>@Html.ActionLink("Ending Soon", "Index", new { sortOrder = ViewBag.CloseDateSortParm })</li>
+                <li>@Html.ActionLink("Price - Lowest First", "Index", new { sortOrder = ViewBag.SalePriceSortParm })</li>
+                <li>@Html.ActionLink("Price - Highest First", "Index", new { sortOrder = ViewBag.SalePriceDescSortParm })</li>
+                <li>@Html.ActionLink("Name A-Z", "Index", new { sortOrder = ViewBag.NameSortParm })</li>
+                <li>@Html.ActionLink("Name Z-A", "Index", new { sortOrder = ViewBag.NameDescSortParm })</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container campaign-index-details">
+
+    @foreach (var item in Model)
+    {
+        Html.RenderPartial("_Panel", item);
+    } 
+</div>

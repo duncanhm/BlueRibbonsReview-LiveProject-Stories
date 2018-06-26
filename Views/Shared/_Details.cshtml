@@ -1,0 +1,80 @@
+﻿@model BlueRibbonsReview.Models.Campaign
+
+@{
+    ViewBag.Title = "Details";
+}
+
+    <div id="bootstrap-override">
+        <div class="details-top" align="center">
+            <ul class="details-modal-list list-group">
+                <li class="list-group-item" id="list-group-item">
+                    <img id="item-image" data-bind="attr:{src: imagePath}" src="@Html.DisplayFor(model => model.ImageUrL)" style="max-height:100%; max-width:100%" />
+                </li>
+                <li class="list-group-item" id="list-group-item">
+                    @{
+                        bool val1 = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+                    }
+                    @{
+                        if (val1 == true)
+                        {
+                            <a class="btn-lg btn-amazon" href="@Model.VendorsPurchaseURL" target="_newtab">See on Amazon</a>
+                        }
+
+                        else
+                        {
+                            <button class="btn-lg btn-amazon some-div" title="Please Login!">
+                                See on Amazon
+                            </button>
+                            
+                        }
+
+                    }
+                </li>
+            </ul>
+        </div>
+        <div class="details-body" style="position:relative">
+            <div class="details-info">
+                @{
+                    var discount = (Model.SalePrice / Model.RetailPrice) * 100;
+                    var discountRound = Math.Round(discount, 1);
+                    var discountString = Convert.ToString(discountRound);
+                }
+                <span>@discountString% off!</span>
+                <br />
+                Regular Price:
+                <span class="item-retail-price" data-bind="text: retailPriceDisplay">$@Html.DisplayFor(model => model.RetailPrice)</span>
+                <br />
+                <div class="specialprice">
+                    Now Only
+                    <span data-bind="text: salePriceDisplay">$@Html.DisplayFor(model => model.SalePrice)</span>
+                   
+                    
+
+
+
+                </div>
+                @if (!Request.IsAuthenticated)
+                {
+                    <p>To request this product, please&nbsp;<a href="'@Url.Action("Register","Account")'">sign in</a></p>
+                }
+
+                <h5 class="details-description">Deal Description:</h5>
+                <p class="item-description" data-bind="text: description">@Html.DisplayFor(model => model.Description)</p>
+                @*send the current campaign name and number to the the next page*@
+                @{
+                    if (val1 == true)
+                    {
+                        @Html.ActionLink("Review this Product", "Create", "Reviews", new { id = Model.CampaignID, name = Model.Name }, null)
+                    }
+
+                    else
+                    {
+                        <div id="some-div">
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Please log in!">Review this Product</a>
+                        </div>
+                    }
+                }
+                <br />
+            </div>
+        </div>
+    </div>

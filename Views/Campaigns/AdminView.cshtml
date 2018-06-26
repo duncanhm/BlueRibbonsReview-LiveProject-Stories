@@ -1,0 +1,103 @@
+﻿@model IEnumerable<BlueRibbonsReview.Models.Campaign>
+
+@{
+    ViewBag.Title = "Campaigns";
+    ViewBag.Tagline = "";
+}
+
+@*<h2>AdminView</h2>*@
+
+<table class="table">
+    <tr>
+         <th>
+             @Html.ActionLink("User Name", "AdminView", new { sortOrder = ViewBag.UserNameSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Email", "AdminView", new { sortOrder = ViewBag.SellerEmailSortParm })
+        </th>
+        <th>
+            Product
+        </th>
+        <th>
+            @Html.ActionLink("Open Campaign", "AdminView", new { sortOrder = ViewBag.OpenCampaignSortParm })
+        </th>
+        <th>
+            Discount
+        </th>
+        <th class="table-sizing">
+            @Html.ActionLink("Start Date", "AdminView", new { sortOrder = ViewBag.StartDateSortParm })
+        </th>
+        <th class="table-sizing">
+            @Html.ActionLink("Close Date", "AdminView", new { sortOrder = ViewBag.CloseDateSortParm })
+        </th>
+        <th class="table-sizing">
+            @Html.ActionLink("Expire Date", "AdminView", new { sortOrder = ViewBag.ExpireDateSortParm })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td> 
+                @*To handle campaigns without an associated user OR legacy users without a first and last name (fullname) , now 
+                    both required fields when registering. 
+                *@
+                @{
+                    if (item.ApplicationUser == null)
+                    {
+
+                        @Html.Raw("(Empty)");
+                    }
+                    else if (item.ApplicationUser.FullName == null)
+                    {
+                        @Html.ActionLink("(Empty)", "Details", "Admin", new { id = item.ApplicationUser.Id })
+                    }
+                    else
+                    {
+                        @Html.ActionLink(Html.DisplayFor(modelItem => item.ApplicationUser.FullName).ToHtmlString(), "Details", "Admin", new { id = item.ApplicationUser.Id }, null)
+                    }
+                }
+            <td>
+                @*Added if/else or the "mailto:" function would cause an error if ApplicationUser was == null  Changed Empty to N/A*@
+                @{
+                    if (item.ApplicationUser == null)
+                    {
+                        @Html.Raw("(N/A)");
+                    }
+                    else
+                    {
+                        <a href="mailto:@(item.ApplicationUser.Email)">@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</a>
+                    }
+                  }
+                </td>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.CampaignID })">
+                    <img src=@item.ImageUrL class="imgDisplay" />
+                </a>
+            </td>
+            <td id="AdminView-OpenCampaign">
+                @Html.DisplayFor(modelItem => item.OpenCampaign)
+            </td>
+            <td>
+                @{
+                    var Discount = 1 - (item.SalePrice / item.RetailPrice);
+                }
+                @String.Format("{0:P0} OFF", Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CloseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpireDate)
+            </td>
+            <td>
+                @Html.ActionLink(" ", "EditAdmin", new { id = item.CampaignID }, new { @class = "fa fa-pencil-square-o fa-lg" })
+                @Html.ActionLink(" ", "Delete", new { id = item.CampaignID }, new { @class = "far fa-trash-alt fa-lg" })
+            </td>
+        </tr>
+    }
+</table>
