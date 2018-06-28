@@ -1,7 +1,9 @@
 # Blue Ribbon Review Live Project Stories
-Below are five stories I completed while working on the "Blue Ribbon Review" Live Project Team. The stories vary from front-end styling changes to back-end work. I have included relevant code snippets and images below, but I have also added all the files I worked on in this repository. Feel free to look further into any of the files for a broader scope.
+Below are five stories I completed while interning on the http://www.blueribbonsreview.com/ Live Project Team with Prosper I.T. Consulting. The stories vary from front-end styling changes to back-end work. The team was working in a testing environment for a new upgrade to the live site, which will be coming soon.
 
-### 1. **Created partial view to render on site's Landing page, with a carousel that loops through images of campaigns (product discounts) that are within 7 days of their expiration date**
+I have included relevant code snippets and images below, but all the files I worked on for these stories have also been added to this repository. Feel free to look further into any of the files for a broader scope.
+
+### 1. Created partial view to render on site's Landing page, with a carousel that loops through images of campaigns (product discounts) that are within 7 days of their expiration date
 Relevant Files:
 - `CampaignsController.cs`
 - `Landing.cshtml`
